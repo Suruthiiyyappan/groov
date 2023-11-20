@@ -31,12 +31,13 @@ def notifyStarted() {
 
   emailext (
       to: 'suruthiiyappan@gmail.com',
-      subject: "Build # $BUILD_NUMBER - $BUILD_STATUS",
+      subject: "$PROJECT_NAME - Build # $BUILD_NUMBER - $BUILD_STATUS",
       body: "$BUILD_STATUS",
       recipientProviders: [[$class: 'DevelopersRecipientProvider']]
     )
 }
 
+return this
 // def notifyFailed() {
 
 //   emailext (
@@ -48,7 +49,6 @@ def notifyStarted() {
 // }
 
 
-return this
 
 // https://www.jenkins.io/blog/2016/07/18/pipeline-notifications/
 //  def createPipeline(PIPELINE_PATH, SCM_USER, IS_MULE) {
