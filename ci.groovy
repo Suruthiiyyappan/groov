@@ -1,5 +1,3 @@
-#!groovy
-
 def createPipeline(PIPELINE_PATH, SCM_USER, IS_MULE) {
     withEnv(["PATH+MAVEN=/opt/apache-maven-3.9.5/bin"]) {
         script {
@@ -16,7 +14,6 @@ def createPipeline(PIPELINE_PATH, SCM_USER, IS_MULE) {
             archiveArtifacts artifacts: '**/target/*.zip', onlyIfSuccessful: true, fingerprint: true, allowEmptyArchive: true
         }
         unittest()
-
     }
 }
 
@@ -28,17 +25,21 @@ def unittest() {
 }
 
 def notifyStarted() {
-    def BUILD_STATUS = "curl --user admin:3bea46c85aec47fea4fd719c20e2d856 --silent ${BUILD_URL}api/json | jq -r '.result'"
+    script {
+        sh 'curl --user admin:3bea46c85aec47fea4fd719c20e2d856 --silent ${BUILD_URL}api/json | jq -r ".result"' > result
+        def BUILD_STATUS = readFile('result').trim()
 
-  emailext (
-      to: 'suruthiiyappan@gmail.com',
-      subject: "$BUILD_STATUS",
-      body: "$BUILD_STATUS",
-      recipientProviders: [[$class: 'DevelopersRecipientProvider']]
-    )
+        emailext (
+            to: 'suruthiiyappan@gmail.com',
+            subject: "Build Status: ${BUILD_STATUS}",
+            body: "Build Status: ${BUILD_STATUS}",
+            recipientProviders: [[$class: 'DevelopersRecipientProvider']]
+        )
+    }
 }
 
 return this
+
 // def notifyFailed() {
 
 //   emailext (
