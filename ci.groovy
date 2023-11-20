@@ -16,7 +16,6 @@ def createPipeline(PIPELINE_PATH, SCM_USER, IS_MULE) {
             archiveArtifacts artifacts: '**/target/*.zip', onlyIfSuccessful: true, fingerprint: true, allowEmptyArchive: true
         }
         unittest()
-        buildstatus()
 
     }
 }
@@ -28,21 +27,56 @@ def unittest() {
     }
 }
 
-def buildstatus() {
-    script {
-    post {
-        failure {
-            mail body: "Check console output of User-Registration at ${BUILD_URL}/console to find the error.", 
-                    to: "${EMAIL_TO}", 
-                    subject: "Build failed in Jenkins: #$BUILD_NUMBER"
-        }
-        success {
-            mail body: "Check console output of User-Registration at ${env.BUILD_URL}/console to view the results.", 
-                    to: "${EMAIL_TO}", 
-                    subject: "Jenkins build is succeed: #$BUILD_NUMBER"
-        }
-    }
-    }
+def notifyStarted() {
+
+  emailext (
+      to: 'suruthiiyappan@gmail.com',
+      subject: "STARTED: Job ${BUILD_NUMBER}",
+      body: "started",
+      recipientProviders: [[$class: 'DevelopersRecipientProvider']]
+    )
 }
 
+def notifyFailed() {
+
+  emailext (
+      to: 'suruthiiyappan@gmail.com',
+      subject: "Failed: Job ${BUILD_NUMBER}",
+      body: "Failed",
+      recipientProviders: [[$class: 'DevelopersRecipientProvider']]
+    )
+}
+
+
 return this
+
+// https://www.jenkins.io/blog/2016/07/18/pipeline-notifications/
+//  def createPipeline(PIPELINE_PATH, SCM_USER, IS_MULE) {
+//     withEnv(["PATH+MAVEN=/opt/apache-maven-3.9.5/bin"]) {
+//         stage('Build') {
+//             if (isUnix()) {
+//                 if (!IS_MULE) {
+//                     echo 'Building dependency modules'
+//                     // Deploying the jar as spring boot generates two jars, one for mule and one for spring
+//                     sh "mvn clean install"
+//                 } else {
+//                     echo 'Not building dependency modules'
+//                 }
+//             }
+//             archiveArtifacts artifacts: '**/target/*.*ar', onlyIfSuccessful: true, fingerprint: true, allowEmptyArchive: true
+//             archiveArtifacts artifacts: '**/target/*.zip', onlyIfSuccessful: true, fingerprint: true, allowEmptyArchive: true
+//         }
+        
+//         // Call the unittest function
+//         unittest()
+//     }
+// }
+
+// def unittest() {
+//     stage('Unit Test') {
+//         echo "Archiving unit test results"
+//         step([$class: 'JUnitResultArchiver', allowEmptyResults: true, testResults: '**/target/surefire-reports/*.xml'])
+//     }
+// }
+
+// return this
