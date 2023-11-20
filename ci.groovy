@@ -27,14 +27,13 @@ def unittest() {
     }
 }
 
-def notifyStarted() {
+def notifyFailed() {
   // send to email
   emailext (
-      to: "suruthiiyappan@gmail.com"
-      subject: "STARTED: Job '${JOB_NAME} [${BUILD_NUMBER}]'",
-      body: """<p>STARTED: Job '${JOB_NAME} [${BUILD_NUMBER}]':</p>
-        <p>Check console output at &QUOT;<a href='${BUILD_URL}'>${JOB_NAME} [${BUILD_NUMBER}]</a>&QUOT;</p>""",
-      recipientProviders: [[$class: 'DevelopersRecipientProvider']]
+            to: "suruthiiyappan@gmail.com"
+            subject: "Failed: Job",
+            body: "$BUILD_NUMBER"
+            recipientProviders: [[$class: 'DevelopersRecipientProvider']]
     )
 }
 
