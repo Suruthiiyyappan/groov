@@ -30,9 +30,9 @@ def unittest() {
 def notifyFailed() {
   // send to email
   emailext (
-            to: "suruthiiyappan@gmail.com"
+            to: "suruthiiyappan@gmail.com",
             subject: "Failed: Job",
-            body: "$BUILD_NUMBER"
+            body: "$BUILD_NUMBER",
             recipientProviders: [[$class: 'DevelopersRecipientProvider']]
     )
 }
