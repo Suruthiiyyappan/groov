@@ -1,13 +1,13 @@
 #!groovy
 
 def createPipeline(PIPELINE_PATH, SCM_USER, IS_MULE) {
-    withEnv(["PATH+MVN=${tool 'mvn3'}/bin"]) {
+    withEnv(["PATH+MAVEN=/opt/apache-maven-3.9.5/bin"]) {
         stage('Build') {
             if (isUnix()) {
                 if (!IS_MULE) {
                     echo 'Building dependency modules'
                     // Deploying the jar as spring boot generates two jars, one for mule and one for spring
-                    sh "mvn clean install"
+                    sh "${mvnCmd} clean install"
                 } else {
                     echo 'Not building dependency modules'
                 }
