@@ -31,21 +31,21 @@ def notifyStarted() {
 
   emailext (
       to: 'suruthiiyappan@gmail.com',
-      subject: "STARTED: Job ${BUILD_NUMBER}",
-      body: "started",
+      subject: "$PROJECT_NAME - Build # $BUILD_NUMBER - $BUILD_STATUS",
+      body: "$BUILD_STATUS",
       recipientProviders: [[$class: 'DevelopersRecipientProvider']]
     )
 }
 
-def notifyFailed() {
+// def notifyFailed() {
 
-  emailext (
-      to: 'suruthiiyappan@gmail.com',
-      subject: "Failed: Job ${BUILD_NUMBER}",
-      body: "Failed",
-      recipientProviders: [[$class: 'DevelopersRecipientProvider']]
-    )
-}
+//   emailext (
+//       to: 'suruthiiyappan@gmail.com',
+//       subject: "Failed: Job ${BUILD_NUMBER}",
+//       body: "Failed",
+//       recipientProviders: [[$class: 'DevelopersRecipientProvider']]
+//     )
+// }
 
 
 return this
