@@ -2,7 +2,7 @@
 
 def createPipeline(PIPELINE_PATH, SCM_USER, IS_MULE) {
     withEnv(["PATH+MAVEN=/opt/apache-maven-3.9.5/bin"]) {
-        stage('Build') {
+        stage("maven build") {
             if (isUnix()) {
                 if (!IS_MULE) {
                     echo 'Building dependency modules'
@@ -15,14 +15,27 @@ def createPipeline(PIPELINE_PATH, SCM_USER, IS_MULE) {
             archiveArtifacts artifacts: '**/target/*.*ar', onlyIfSuccessful: true, fingerprint: true, allowEmptyArchive: true
             archiveArtifacts artifacts: '**/target/*.zip', onlyIfSuccessful: true, fingerprint: true, allowEmptyArchive: true
         }
+        unittest()
 
-        // Run tests for the current code branch
-        stage('Unit Test') {
-            echo "Archiving unit test results"
-            step([$class: 'JUnitResultArchiver', allowEmptyResults: true, testResults: '**/target/surefire-reports/*.xml'])
-        }
     }
 }
 
-return this
+def unittest() {
+    stage("unit test") {
+        echo "Archiving unit test results"
+        step([$class: 'JUnitResultArchiver', allowEmptyResults: true, testResults: '**/target/surefire-reports/*.xml'])
+    }
+}
 
+def notifyStarted() {
+  // send to email
+  emailext (
+      to: "suruthiiyappan@gmail.com"
+      subject: "STARTED: Job '${JOB_NAME} [${BUILD_NUMBER}]'",
+      body: """<p>STARTED: Job '${JOB_NAME} [${BUILD_NUMBER}]':</p>
+        <p>Check console output at &QUOT;<a href='${BUILD_URL}'>${JOB_NAME} [${BUILD_NUMBER}]</a>&QUOT;</p>""",
+      recipientProviders: [[$class: 'DevelopersRecipientProvider']]
+    )
+}
+
+return this
