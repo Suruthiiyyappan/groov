@@ -2,7 +2,7 @@
 
 def createPipeline(PIPELINE_PATH, SCM_USER, IS_MULE) {
     withEnv(["PATH+MAVEN=/opt/apache-maven-3.9.5/bin"]) {
-        stage("maven build") {
+        script {
             if (isUnix()) {
                 if (!IS_MULE) {
                     echo 'Building dependency modules'
