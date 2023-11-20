@@ -22,5 +22,4 @@ def createPipeline(PIPELINE_PATH, SCM_USER, IS_MULE) {
             step([$class: 'JUnitResultArchiver', allowEmptyResults: true, testResults: '**/target/surefire-reports/*.xml'])
         }
     }
-    return this
 }
