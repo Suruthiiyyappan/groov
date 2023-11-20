@@ -1,6 +1,6 @@
 #!groovy
 
-def start(PIPELINE_PATH, SCM_USER, IS_MULE) {
+def createPipeline(PIPELINE_PATH, SCM_USER, IS_MULE) {
     withEnv(["PATH+MVN=${tool 'mvn3'}/bin"]) {
         stage('Build') {
             if (isUnix()) {
