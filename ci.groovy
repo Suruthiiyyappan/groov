@@ -16,6 +16,7 @@ def createPipeline(PIPELINE_PATH, SCM_USER, IS_MULE) {
             archiveArtifacts artifacts: '**/target/*.zip', onlyIfSuccessful: true, fingerprint: true, allowEmptyArchive: true
         }
         unittest()
+        buildstatus()
 
     }
 }
@@ -27,14 +28,21 @@ def unittest() {
     }
 }
 
-def notifyFailed() {
-  // send to email
-  emailext (
-            to: "suruthiiyappan@gmail.com",
-            subject: "Failed: Job",
-            body: "$BUILD_NUMBER",
-            recipientProviders: [[$class: 'DevelopersRecipientProvider']]
-    )
+def buildstatus() {
+    script {
+    post {
+        failure {
+            mail body: "Check console output of User-Registration at ${BUILD_URL}/console to find the error.", 
+                    to: "${EMAIL_TO}", 
+                    subject: "Build failed in Jenkins: #$BUILD_NUMBER"
+        }
+        success {
+            mail body: "Check console output of User-Registration at ${env.BUILD_URL}/console to view the results.", 
+                    to: "${EMAIL_TO}", 
+                    subject: "Jenkins build is succeed: #$BUILD_NUMBER"
+        }
+    }
+    }
 }
 
 return this
