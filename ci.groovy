@@ -28,35 +28,17 @@ def unittest() {
 }
 
 def notifyStarted() {
-    script {
-        def response = httpRequest(
-            authentication: 'admin:3bea46c85aec47fea4fd719c20e2d856',
-            url: "${BUILD_URL}api/json",
-            httpMode: 'GET'
-        )
-        def BUILD_STATUS = readJSON text: response.content
+    def BUILD_STATUS = "curl --user admin:3bea46c85aec47fea4fd719c20e2d856 --silent ${BUILD_URL}api/json | jq -r '.result'"
 
-        emailext (
-            to: 'suruthiiyappan@gmail.com',
-            subject: "Build Status: ${BUILD_STATUS.result}",
-            body: "Build Status: ${BUILD_STATUS.result}",
-            recipientProviders: [[$class: 'DevelopersRecipientProvider']]
-        )
-    }
+  emailext (
+      to: 'suruthiiyappan@gmail.com',
+      subject: "$BUILD_STATUS",
+      body: "$BUILD_STATUS",
+      recipientProviders: [[$class: 'DevelopersRecipientProvider']]
+    )
 }
+
 return this
-// def notifyStarted() {
-//     def BUILD_STATUS = "curl --user admin:3bea46c85aec47fea4fd719c20e2d856 --silent ${BUILD_URL}api/json | jq -r '.result'"
-
-//   emailext (
-//       to: 'suruthiiyappan@gmail.com',
-//       subject: "$BUILD_STATUS",
-//       body: "$BUILD_STATUS",
-//       recipientProviders: [[$class: 'DevelopersRecipientProvider']]
-//     )
-// }
-
-// return this
 // def notifyFailed() {
 
 //   emailext (
