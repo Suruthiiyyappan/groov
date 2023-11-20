@@ -1,6 +1,6 @@
 #!groovy
 
-def createPipeline(PIPELINE_PATH, SCM_USER, IS_MULE) {
+def createPipeline(PIPELINE_PATH, IS_MULE) {
     withEnv(["PATH+MAVEN=/opt/apache-maven-3.9.5/bin"]) {
         stage('Build') {
             if (isUnix()) {
