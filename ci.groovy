@@ -31,7 +31,7 @@ def notifyStarted() {
 
   emailext (
       to: 'suruthiiyappan@gmail.com',
-      subject: "$PROJECT_NAME - Build # $BUILD_NUMBER - $BUILD_STATUS",
+      subject: "Build # $BUILD_NUMBER - $BUILD_STATUS",
       body: "$BUILD_STATUS",
       recipientProviders: [[$class: 'DevelopersRecipientProvider']]
     )
