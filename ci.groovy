@@ -28,7 +28,7 @@ def unittest() {
 }
 
 def notifyStarted() {
-    def BUILD_STATUS = "curl --user admin:3bea46c85aec47fea4fd719c20e2d856 --silent $BUILD_URL/api/json | jq -r '.result'"
+    def BUILD_STATUS = curl --user admin:3bea46c85aec47fea4fd719c20e2d856 --silent $BUILD_URL/api/json | jq -r '.result'
 
   emailext (
       to: 'suruthiiyappan@gmail.com',
