@@ -25,20 +25,23 @@ def unittest() {
 }
 
 def notifyStarted() {
-    script {
-        sh 'curl --user admin:3bea46c85aec47fea4fd719c20e2d856 --silent ${BUILD_URL}api/json | jq -r ".result"' >> result
-        def BUILD_STATUS = result.getText();
-        echo "${BUILD_STATUS}"
+        def url = "${BUILD_URL}api/json "
+        def connection = new URL(url).openConnection()
+        connection.connectTimeout = 30000 // 30-second timeout
+        connection.readTimeout = 30000 // 30-second timeout
 
-        emailext (
-            to: 'suruthiiyappan@gmail.com',
-            subject: "Build Status: ${BUILD_STATUS}",
-            body: "Build Status: ${BUILD_STATUS}",
-            recipientProviders: [[$class: 'DevelopersRecipientProvider']]
-        )
-    }
+        def jsonResponse = new groovy.json.JsonSlurper().parseText(connection.text)
+        def BUILD_STATUS = jsonResponse.result
+
+        // def BUILD_STATUS = "curl --user admin:3bea46c85aec47fea4fd719c20e2d856 --silent ${BUILD_URL}api/json | jq -r '.result'"
+  emailext (
+      to: 'suruthiiyappan@gmail.com',
+      subject: "$BUILD_STATUS",
+      body: "$BUILD_STATUS",
+      recipientProviders: [[$class: 'DevelopersRecipientProvider']]
+    )
+    
 }
-
 return this
 
 // def notifyFailed() {
