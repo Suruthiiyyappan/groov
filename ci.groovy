@@ -27,25 +27,25 @@ def unittest() {
     }
 }
 
-def notifyStarted() {
+// def notifyStarted() {
 
-  emailext (
-      to: 'suruthiiyappan@gmail.com',
-      subject: "STARTED: Job ${BUILD_NUMBER}",
-      body: "started",
-      recipientProviders: [[$class: 'DevelopersRecipientProvider']]
-    )
-}
+//   emailext (
+//       to: 'suruthiiyappan@gmail.com',
+//       subject: "STARTED: Job ${BUILD_NUMBER}",
+//       body: "started",
+//       recipientProviders: [[$class: 'DevelopersRecipientProvider']]
+//     )
+// }
 
-def notifyFailed() {
+// def notifyFailed() {
 
-  emailext (
-      to: 'suruthiiyappan@gmail.com',
-      subject: "Failed: Job ${BUILD_NUMBER}",
-      body: "Failed",
-      recipientProviders: [[$class: 'DevelopersRecipientProvider']]
-    )
-}
+//   emailext (
+//       to: 'suruthiiyappan@gmail.com',
+//       subject: "Failed: Job ${BUILD_NUMBER}",
+//       body: "Failed",
+//       recipientProviders: [[$class: 'DevelopersRecipientProvider']]
+//     )
+// }
 
 
 return this
