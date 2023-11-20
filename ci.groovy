@@ -1,13 +1,13 @@
 #!groovy
 
-def createPipeline(PIPELINE_PATH, IS_MULE) {
+def createPipeline(PIPELINE_PATH, SCM_USER, IS_MULE) {
     withEnv(["PATH+MAVEN=/opt/apache-maven-3.9.5/bin"]) {
         stage('Build') {
             if (isUnix()) {
                 if (!IS_MULE) {
                     echo 'Building dependency modules'
                     // Deploying the jar as spring boot generates two jars, one for mule and one for spring
-                    sh "${mvnCmd} clean install"
+                    sh "mvn clean install"
                 } else {
                     echo 'Not building dependency modules'
                 }
@@ -17,9 +17,12 @@ def createPipeline(PIPELINE_PATH, IS_MULE) {
         }
 
         // Run tests for the current code branch
-        stage('Unit Test ') {
+        stage('Unit Test') {
             echo "Archiving unit test results"
             step([$class: 'JUnitResultArchiver', allowEmptyResults: true, testResults: '**/target/surefire-reports/*.xml'])
         }
     }
 }
+
+return this
+
